@@ -250,6 +250,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 '''
 #YANGISI
+# ================== YANGISI (MISOLLAR BILAN) ==================
 
 import asyncio
 import logging
@@ -263,8 +264,8 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from aiogram.types import KeyboardButton, InlineKeyboardButton
 
 # ================== СОЗЛАМАЛАР ==================
-API_TOKEN = '8361270725:AAHe4uiGMDJ998ZjffeZ94D5uu5axU8F49o'
-CHANNEL_ID = -1003829181382  # Каналингиз ИД-си (албатта манфий сон)
+API_TOKEN = ""
+CHANNEL_ID = -1001234567890   # Каналингиз ID-си (манфий)
 CHANNEL_URL = "https://t.me/dayjob_khujand/19"
 
 PHONE_REGEX = r"^\d{9}$"
@@ -346,7 +347,11 @@ async def employer_start(message: types.Message, state: FSMContext):
         KeyboardButton(text="Бошқа кун")
     )
     await message.answer(
-        "📅 <b>Санаи корро интихоб кунед</b>",
+        "📅 <b>Санаи корро интихоб кунед</b>\n"
+        "Мисол:\n"
+        "• Бугун\n"
+        "• Эртага\n"
+        "• Бошқа кун",
         reply_markup=kb.as_markup(resize_keyboard=True),
         parse_mode="HTML"
     )
@@ -362,14 +367,15 @@ async def step_date(message: types.Message, state: FSMContext):
         date_str = (today + timedelta(days=1)).strftime("%d.%m.%Y")
     elif message.text == "Бошқа кун":
         await message.answer(
-            "📅 <b>Санаи корро ворид кунед</b>\nМисол: 25.02.2026",
+            "📅 <b>Санаи корро ворид кунед</b>\n"
+            "Мисол: 25.02.2026",
             reply_markup=types.ReplyKeyboardRemove(),
             parse_mode="HTML"
         )
         return
     else:
         if not re.match(DATE_REGEX, message.text):
-            await message.answer("❌ Формати сана нодуруст аст. Мисол: 25.02.2026")
+            await message.answer("❌ Формати сана нодуруст аст.\nМисол: 25.02.2026")
             return
         date_str = message.text
 
@@ -377,7 +383,10 @@ async def step_date(message: types.Message, state: FSMContext):
 
     await message.answer(
         "⏰ <b>Соатҳои кор</b>\n"
-        "Масалан: 09:00–18:00 ё то анҷоми кор",
+        "Мисол:\n"
+        "• 09:00–18:00\n"
+        "• 08:00–17:00\n"
+        "• то анҷоми кор",
         parse_mode="HTML"
     )
     await state.set_state(EmployerStates.work_time)
@@ -387,7 +396,11 @@ async def step_time(message: types.Message, state: FSMContext):
     await state.update_data(work_time=message.text)
     await message.answer(
         "🛠 <b>Намуди корро ворид намоед</b>\n"
-        "Масалан: усто, боркаш, электрик",
+        "Мисол:\n"
+        "• усто\n"
+        "• боркаш\n"
+        "• электрик\n"
+        "• сантехник",
         parse_mode="HTML"
     )
     await state.set_state(EmployerStates.work_type)
@@ -396,7 +409,11 @@ async def step_time(message: types.Message, state: FSMContext):
 async def step_type(message: types.Message, state: FSMContext):
     await state.update_data(work_type=message.text)
     await message.answer(
-        "📝 <b>Тавсифи кӯтоҳи корро нависед</b>",
+        "📝 <b>Тавсифи кӯтоҳи корро нависед</b>\n"
+        "Мисол:\n"
+        "• Таъмири хонаи 2-ҳуҷрагӣ\n"
+        "• Боркашонӣ барои 1 рӯз\n"
+        "• Иваз кардани қубур",
         parse_mode="HTML"
     )
     await state.set_state(EmployerStates.description)
@@ -405,7 +422,8 @@ async def step_type(message: types.Message, state: FSMContext):
 async def step_desc(message: types.Message, state: FSMContext):
     await state.update_data(description=message.text)
     await message.answer(
-        "📍 <b>Шаҳр ё ноҳияро интихоб кунед</b>",
+        "📍 <b>Шаҳр ё ноҳияро интихоб кунед</b>\n"
+        "Мисол: Душанбе, Хуҷанд, Бохтар",
         reply_markup=location_keyboard(),
         parse_mode="HTML"
     )
@@ -419,7 +437,10 @@ async def step_location_main(message: types.Message, state: FSMContext):
 
     await state.update_data(location_main=message.text)
     await message.answer(
-        "➕ <b>Қисми иловагии суроға</b>",
+        "➕ <b>Қисми иловагии суроға</b>\n"
+        "Мисол:\n"
+        "• 32 микроноҳия\n"
+        "• кӯчаи Сомонӣ",
         reply_markup=types.ReplyKeyboardRemove(),
         parse_mode="HTML"
     )
@@ -436,7 +457,11 @@ async def step_location_extra(message: types.Message, state: FSMContext):
         KeyboardButton(text="Қўлда менависам")
     )
     await message.answer(
-        "💰 <b>Музди меҳнат</b>",
+        "💰 <b>Музди меҳнат</b>\n"
+        "Мисол:\n"
+        "• 200 сомонӣ\n"
+        "• 300 сомонӣ\n"
+        "• Келишамиз",
         reply_markup=kb.as_markup(resize_keyboard=True),
         parse_mode="HTML"
     )
@@ -444,9 +469,21 @@ async def step_location_extra(message: types.Message, state: FSMContext):
 
 @dp.message(EmployerStates.price)
 async def step_price(message: types.Message, state: FSMContext):
+    if message.text == "Қўлда менависам":
+        await message.answer(
+            "💰 <b>Музди меҳнатро ворид кунед</b>\n"
+            "Мисол: 250 сомонӣ",
+            reply_markup=types.ReplyKeyboardRemove(),
+            parse_mode="HTML"
+        )
+        return
+
     await state.update_data(price=message.text)
     await message.answer(
-        "👤 <b>Номи худро ворид кунед</b>",
+        "👤 <b>Номи худро ворид кунед</b>\n"
+        "Мисол:\n"
+        "• Али\n"
+        "• Муҳаммад",
         reply_markup=types.ReplyKeyboardRemove(),
         parse_mode="HTML"
     )
@@ -459,7 +496,9 @@ async def step_name(message: types.Message, state: FSMContext):
     kb = ReplyKeyboardBuilder()
     kb.row(KeyboardButton(text="📱 Фиристодани рақам", request_contact=True))
     await message.answer(
-        "📞 <b>Рақами тамос</b>",
+        "📞 <b>Рақами тамос</b>\n"
+        "Мисол:\n"
+        "• 987654321",
         reply_markup=kb.as_markup(resize_keyboard=True),
         parse_mode="HTML"
     )
@@ -472,7 +511,7 @@ async def step_contact(message: types.Message, state: FSMContext):
     elif message.text and re.match(PHONE_REGEX, message.text):
         phone = message.text
     else:
-        await message.answer("❌ Рақами телефон нодуруст аст.")
+        await message.answer("❌ Рақами телефон нодуруст аст.\nМисол: 987654321")
         return
 
     data = await state.get_data()
@@ -502,7 +541,7 @@ async def step_contact(message: types.Message, state: FSMContext):
     await state.clear()
 
 # ================== FALLBACK ==================
-@dp.message()
+@dp.message(F.text, ~F.state)
 async def fallback(message: types.Message):
     await message.answer(
         "Лутфан аз меню истифода баред 👇",
