@@ -92,16 +92,16 @@ async def worker_handler(message: types.Message):
 async def employer_start(message: types.Message, state: FSMContext):
     kb = ReplyKeyboardBuilder()
     kb.row(
-        KeyboardButton(text="Бугун"),
-        KeyboardButton(text="Эртага"),
-        KeyboardButton(text="Бошқа кун")
+        KeyboardButton(text="Имрӯз"),
+        KeyboardButton(text="Пагоҳ"),
+        KeyboardButton(text="Дигар рӯз")
     )
     await message.answer(
         "📅 <b>Санаи корро интихоб кунед</b>\n"
         "Мисол:\n"
-        "• Бугун\n"
-        "• Эртага\n"
-        "• Бошқа кун",
+        "• Имрӯз\n"
+        "• Пагоҳ\n"
+        "• Дигар рӯз",
         reply_markup=kb.as_markup(resize_keyboard=True),
         parse_mode="HTML"
     )
@@ -111,11 +111,11 @@ async def employer_start(message: types.Message, state: FSMContext):
 async def step_date(message: types.Message, state: FSMContext):
     today = datetime.now()
 
-    if message.text == "Бугун":
+    if message.text == "Имрӯз":
         date_str = today.strftime("%d.%m.%Y")
-    elif message.text == "Эртага":
+    elif message.text == "Пагоҳ":
         date_str = (today + timedelta(days=1)).strftime("%d.%m.%Y")
-    elif message.text == "Бошқа кун":
+    elif message.text == "Дигар рӯз":
         await message.answer(
             "📅 <b>Санаи корро ворид кунед</b>\n"
             "Мисол: 25.02.2026",
@@ -143,7 +143,9 @@ async def step_date(message: types.Message, state: FSMContext):
 
 @dp.message(EmployerStates.work_time)
 async def step_time(message: types.Message, state: FSMContext):
+    # ⏰ Вақт — ОДДИЙ STRING, ҲЕЧ ҚАНДАЙ FORMAT ТЕКШИРУВИ ЙЎҚ
     await state.update_data(work_time=message.text)
+
     await message.answer(
         "🛠 <b>Намуди корро ворид намоед</b>\n"
         "Мисол:\n"
@@ -203,15 +205,15 @@ async def step_location_extra(message: types.Message, state: FSMContext):
 
     kb = ReplyKeyboardBuilder()
     kb.row(
-        KeyboardButton(text="Келишамиз"),
-        KeyboardButton(text="Қўлда менависам")
+        KeyboardButton(text="Дар сӯҳбат"),
+        KeyboardButton(text="Бо даст менависам")
     )
     await message.answer(
         "💰 <b>Музди меҳнат</b>\n"
         "Мисол:\n"
         "• 200 сомонӣ\n"
         "• 300 сомонӣ\n"
-        "• Келишамиз",
+        "• Дар сӯҳбат",
         reply_markup=kb.as_markup(resize_keyboard=True),
         parse_mode="HTML"
     )
@@ -219,7 +221,7 @@ async def step_location_extra(message: types.Message, state: FSMContext):
 
 @dp.message(EmployerStates.price)
 async def step_price(message: types.Message, state: FSMContext):
-    if message.text == "Қўлда менависам":
+    if message.text == "Бо даст менависам":
         await message.answer(
             "💰 <b>Музди меҳнатро ворид кунед</b>\n"
             "Мисол: 250 сомонӣ",
@@ -304,5 +306,6 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 
 
