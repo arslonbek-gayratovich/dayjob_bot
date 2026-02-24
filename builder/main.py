@@ -14,7 +14,7 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 from aiogram.types import KeyboardButton, InlineKeyboardButton
 
 # ================== СОЗЛАМАЛАР ==================
-API_TOKEN = '8361270725:AAHe4uiGMDJ998ZjffeZ94D5uu5axU8F49o'
+API_TOKEN = '8361270725:AAHDOyAHNsFwO1_apcVyQ5pXshO3K6Oi6Dg'
 CHANNEL_ID = -1003829181382  # Каналингиз ИД-си (албатта манфий сон)
 CHANNEL_URL = "https://t.me/dayjob_khujand/19"
 
@@ -306,6 +306,7 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 
 
 
